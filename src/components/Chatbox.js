@@ -35,19 +35,29 @@ const Chatbox = () => {
     e.preventDefault();
     if (!userInput.trim()) return;
 
-    // Add user message to chat
+    // Add user message to chat UI
     const newUserMessage = {
       sender: "user",
       text: userInput,
     };
 
     try {
-      // Send message to server
-      const response = await axios.post("http://localhost:5000/api/interview", {
+      // Transform messages into the format expected by the API
+      const formattedHistory = messages.map((msg) => ({
+        role: msg.sender === "user" ? "user" : "model",
+        parts: [{ text: msg.text }],
+      }));
+
+      const requestBody = {
         jobTitle,
         message: userInput,
-        messageHistory: messages,
-      });
+        messageHistory: formattedHistory, // Modified line: removed the spread operator and the additional user message
+      };
+
+      console.log("Sending API request with:", JSON.stringify(requestBody, null, 2));
+
+      // Send message to server
+      const response = await axios.post("http://localhost:5000/api/interview", requestBody);
 
       // Add bot response to chat
       const newBotMessage = {
