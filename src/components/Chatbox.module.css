@@ -1,0 +1,142 @@
+.chatbox {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.jobTitleContainer {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.jobTitleInput {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.jobTitleInput:disabled {
+  background-color: #f5f5f5;
+}
+
+.startButton {
+  padding: 0.75rem 1.5rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.startButton:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.startButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.messagesContainer {
+  height: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+}
+
+.message {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  max-width: 80%;
+}
+
+.userMessage {
+  margin-left: auto;
+  background-color: #007bff;
+  color: white;
+}
+
+.botMessage {
+  margin-right: auto;
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+.messageSender {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.messageText {
+  margin: 0.5rem 0 0;
+  line-height: 1.4;
+}
+
+.inputForm {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.messageInput {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.messageInput:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.sendButton {
+  padding: 0.75rem 1.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.sendButton:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.sendButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .chatbox {
+    margin: 1rem;
+  }
+
+  .message {
+    max-width: 90%;
+  }
+
+  .jobTitleContainer {
+    flex-direction: column;
+  }
+
+  .startButton {
+    width: 100%;
+  }
+}
