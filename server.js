@@ -3,24 +3,34 @@ const cors = require("cors");
 const axios = require("axios");
 require("dotenv").config();
 
+// Server setup and configuration
 const app = express();
 const port = 5000;
 
 // Initialize Google Gemini AI with API key from .env file
 const apiKey = process.env.GOOGLE_API_KEY;
 
-// Generation configuration
+// AI model configuration for response generation
 const generationConfig = {
-  temperature: 0.7,
-  maxOutputTokens: 1024,
+  temperature: 0.7, // Controls response randomness (0.0-1.0)
+  maxOutputTokens: 1024, // Maximum length of generated responses
 };
 
+// Middleware setup
 app.use(cors());
 app.use(express.json());
 
+/**
+ * Generates the prompt for the AI based on interview context
+ * @param {string} jobTitle - The position being interviewed for
+ * @param {string} userMessage - The latest message from the candidate
+ * @param {Array} messageHistory - Previous conversation history
+ */
 const generatePrompt = (jobTitle, userMessage, messageHistory) => {
+  // Count previous interviewer questions
   const questionCount = messageHistory.filter((m) => m.role === "model").length;
 
+  // If interview is complete (6 questions asked), generate final evaluation
   if (questionCount >= 6) {
     return `You are an AI interviewer for a ${jobTitle} position.
                     Based on the candidate's responses in the interview, provide a detailed evaluation of their performance.
@@ -32,6 +42,7 @@ const generatePrompt = (jobTitle, userMessage, messageHistory) => {
                     **Provide a summary of how well you think the user did in the interview.**`;
   }
 
+  // Generate next interview question
   return `You are an AI interviewer for a ${jobTitle} position.
                 The candidate's previous responses are:
                 ${messageHistory.map((m) => `${m.role}: ${m.parts[0].text}`).join("\n")}
@@ -44,12 +55,18 @@ const generatePrompt = (jobTitle, userMessage, messageHistory) => {
                 Do not provide canned scenarios or pre-defined questions.`;
 };
 
+/**
+ * Main interview endpoint - handles conversation flow and AI responses
+ * Processes user input and returns AI-generated interviewer responses
+ */
 app.post("/api/interview", async (req, res) => {
   const { jobTitle, messageHistory } = req.body;
 
-  console.log("Received messageHistory:", JSON.stringify(messageHistory, null, 2)); // Log with formatting
+  // Debug logging for message history
+  console.log("Received messageHistory:", JSON.stringify(messageHistory, null, 2));
 
   try {
+    // Validate message history format
     if (
       !messageHistory ||
       messageHistory.length === 0 ||
@@ -60,6 +77,7 @@ app.post("/api/interview", async (req, res) => {
       return res.status(400).json({ error: "Invalid message history format" });
     }
 
+    // Generate AI prompt based on context
     const prompt = generatePrompt(
       jobTitle,
       messageHistory[messageHistory.length - 1].parts[0].text,
@@ -69,6 +87,7 @@ app.post("/api/interview", async (req, res) => {
     console.log("Generated Prompt:", prompt);
 
     try {
+      // Call Gemini AI API for response generation
       const response = await axios.post(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
         {
@@ -86,8 +105,10 @@ app.post("/api/interview", async (req, res) => {
         }
       );
 
-      console.log("Gemini Result:", JSON.stringify(response.data, null, 2)); // Log with formatting
+      // Debug logging for AI response
+      console.log("Gemini Result:", JSON.stringify(response.data, null, 2));
 
+      // Validate and extract AI response
       if (
         response.data &&
         response.data.candidates &&
@@ -103,6 +124,7 @@ app.post("/api/interview", async (req, res) => {
         return res.status(500).json({ error: "Unexpected Gemini API response format" });
       }
     } catch (apiError) {
+      // Handle Gemini API specific errors
       console.error(
         "Gemini API Error:",
         apiError.response ? apiError.response.data : apiError.message
@@ -113,11 +135,13 @@ app.post("/api/interview", async (req, res) => {
       });
     }
   } catch (error) {
+    // Handle general server errors
     console.error("Error generating response:", error);
     res.status(500).json({ error: "Failed to generate response", details: error.message });
   }
 });
 
+// Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
