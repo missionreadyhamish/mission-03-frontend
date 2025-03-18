@@ -23,6 +23,8 @@ const Chatbox = () => {
       return;
     }
 
+    console.log("Starting interview for job title:", jobTitle);
+
     setIsInterviewStarted(true);
     const initialMessage = {
       sender: "interviewer",
