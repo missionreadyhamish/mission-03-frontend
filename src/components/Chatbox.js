@@ -64,10 +64,16 @@ const Chatbox = () => {
       };
 
       // Debug log for API request
-      console.log("Sending API request with:", JSON.stringify(requestBody, null, 2));
+      console.log(
+        "Sending API request with:",
+        JSON.stringify(requestBody, null, 2)
+      );
 
       // Make API call to get interviewer's response
-      const response = await axios.post("http://localhost:5000/api/interview", requestBody);
+      const response = await axios.post(
+        "http://localhost:4000/api/interview",
+        requestBody
+      );
 
       // Create interviewer message object for display
       const newBotMessage = {
@@ -76,7 +82,11 @@ const Chatbox = () => {
       };
 
       // Update chat history with both messages
-      setMessages((prevMessages) => [...prevMessages, newUserMessage, newBotMessage]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        newUserMessage,
+        newBotMessage,
+      ]);
       setUserInput(""); // Clear input field
     } catch (error) {
       console.error("Error:", error);
@@ -136,7 +146,11 @@ const Chatbox = () => {
             placeholder="Type your response..."
             className={styles.messageInput}
           />
-          <button type="submit" className={styles.sendButton} disabled={!userInput.trim()}>
+          <button
+            type="submit"
+            className={styles.sendButton}
+            disabled={!userInput.trim()}
+          >
             Send
           </button>
         </form>

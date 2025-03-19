@@ -5,7 +5,7 @@ require("dotenv").config();
 
 // Server setup and configuration
 const app = express();
-const port = 5000;
+const port = 4000;
 
 // Initialize Google Gemini AI with API key from .env file
 const apiKey = process.env.GOOGLE_API_KEY;
@@ -27,32 +27,28 @@ app.use(express.json());
  * @param {Array} messageHistory - Previous conversation history
  */
 const generatePrompt = (jobTitle, userMessage, messageHistory) => {
-  // Count previous interviewer questions
   const questionCount = messageHistory.filter((m) => m.role === "model").length;
+  const basePrompt = `You are an AI interviewer for a ${jobTitle} position.
+                      You should also make the candidate laugh.
+                      The candidate's previous responses are:
+                      ${messageHistory
+                        .map((m) => `${m.role}: ${m.parts[0].text}`)
+                        .join("\n")}`;
 
-  // If interview is complete (6 questions asked), generate final evaluation
   if (questionCount >= 6) {
-    return `You are an AI interviewer for a ${jobTitle} position.
-                    Based on the candidate's responses in the interview, provide a detailed evaluation of their performance.
-                    The candidate's previous responses are:
-                ${messageHistory.map((m) => `${m.role}: ${m.parts[0].text}`).join("\n")}
-                
-                    Include specific strengths, areas for improvement, and actionable suggestions.
-                    Be professional but constructive in your feedback.
-                    **Provide a summary of how well you think the user did in the interview.**`;
+    return `${basePrompt}
+            Based on the candidate's responses in the interview, provide a detailed evaluation of their performance.
+            Include specific strengths, areas for improvement, and actionable suggestions.
+            Be professional but constructive in your feedback.
+            **Provide a summary of how well you think the user did in the interview.**`;
   }
 
-  // Generate next interview question
-  return `You are an AI interviewer for a ${jobTitle} position.
-                The candidate's previous responses are:
-                ${messageHistory.map((m) => `${m.role}: ${m.parts[0].text}`).join("\n")}
-
-                The candidate just said: "${userMessage}".
-
-                What is your next question for the candidate?
-                Keep the question concise and relevant to the conversation.
-                Do not repeat previous questions.
-                Do not provide canned scenarios or pre-defined questions.`;
+  return `${basePrompt}
+          The candidate just said: "${userMessage}".
+          What is your next question for the candidate?
+          Keep the question concise and relevant to the conversation.
+          Do not repeat previous questions.
+          Do not provide canned scenarios or pre-defined questions.`;
 };
 
 /**
@@ -63,26 +59,22 @@ app.post("/api/interview", async (req, res) => {
   const { jobTitle, messageHistory } = req.body;
 
   // Debug logging for message history
-  console.log("Received messageHistory:", JSON.stringify(messageHistory, null, 2));
+  console.log(
+    "Received messageHistory:",
+    JSON.stringify(messageHistory, null, 2)
+  );
 
   try {
     // Validate message history format
-    if (
-      !messageHistory ||
-      messageHistory.length === 0 ||
-      !messageHistory[messageHistory.length - 1].parts ||
-      !messageHistory[messageHistory.length - 1].parts[0] ||
-      !messageHistory[messageHistory.length - 1].parts[0].text
-    ) {
+    const lastMessage = messageHistory?.[messageHistory.length - 1];
+    const lastMessageText = lastMessage?.parts?.[0]?.text;
+
+    if (!messageHistory?.length || !lastMessageText) {
       return res.status(400).json({ error: "Invalid message history format" });
     }
 
     // Generate AI prompt based on context
-    const prompt = generatePrompt(
-      jobTitle,
-      messageHistory[messageHistory.length - 1].parts[0].text,
-      messageHistory
-    );
+    const prompt = generatePrompt(jobTitle, lastMessageText, messageHistory);
 
     console.log("Generated Prompt:", prompt);
 
@@ -109,19 +101,15 @@ app.post("/api/interview", async (req, res) => {
       console.log("Gemini Result:", JSON.stringify(response.data, null, 2));
 
       // Validate and extract AI response
-      if (
-        response.data &&
-        response.data.candidates &&
-        response.data.candidates[0] &&
-        response.data.candidates[0].content &&
-        response.data.candidates[0].content.parts &&
-        response.data.candidates[0].content.parts[0] &&
-        response.data.candidates[0].content.parts[0].text
-      ) {
-        res.json({ reply: response.data.candidates[0].content.parts[0].text });
+      const aiResponse =
+        response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (aiResponse) {
+        res.json({ reply: aiResponse });
       } else {
         console.error("Unexpected Gemini API response:", response.data);
-        return res.status(500).json({ error: "Unexpected Gemini API response format" });
+        return res
+          .status(500)
+          .json({ error: "Unexpected Gemini API response format" });
       }
     } catch (apiError) {
       // Handle Gemini API specific errors
@@ -137,7 +125,9 @@ app.post("/api/interview", async (req, res) => {
   } catch (error) {
     // Handle general server errors
     console.error("Error generating response:", error);
-    res.status(500).json({ error: "Failed to generate response", details: error.message });
+    res
+      .status(500)
+      .json({ error: "Failed to generate response", details: error.message });
   }
 });
 
