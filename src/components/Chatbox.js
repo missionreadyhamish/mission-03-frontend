@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import styles from "./Chatbox.module.css";
+// import 'dotenv/config';
+
+// const port = process.env.SERVER_PORT;
+const port = 5000;
 
 const Chatbox = () => {
   const [jobTitle, setJobTitle] = useState("");
@@ -58,8 +62,10 @@ const Chatbox = () => {
 
       console.log("Sending API request with:", JSON.stringify(requestBody, null, 2));
 
+      console.log(`http://localhost:${port}/api/interview`, requestBody);
+
       // Send message to server
-      const response = await axios.post("http://localhost:5000/api/interview", requestBody);
+      const response = await axios.post(`http://localhost:${port}/api/interview`, requestBody);
 
       // Add bot response to chat
       const newBotMessage = {
@@ -115,7 +121,7 @@ const Chatbox = () => {
       </div>
 
       {isInterviewStarted && (
-        <form onSubmit={handleSubmit} className={styles.inputForm}>
+        <form action="#submit" onSubmit={handleSubmit} className={styles.inputForm}>
           <input
             type="text"
             value={userInput}

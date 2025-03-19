@@ -4,7 +4,8 @@ const axios = require("axios");
 require("dotenv").config();
 
 const app = express();
-const port = 5001;
+// const port = 5001;
+const port =  process.env.SERVER_PORT;
 
 // Initialize Google Gemini AI with API key from .env file
 const apiKey = process.env.GOOGLE_API_KEY;
