@@ -66,8 +66,8 @@ app.post("/api/interview", async (req, res) => {
 
   try {
     // Validate message history format
-    const lastMessage = messageHistory?.[messageHistory.length - 1];
-    const lastMessageText = lastMessage?.parts?.[0]?.text;
+    const lastMessageText =
+      messageHistory?.[messageHistory.length - 1]?.parts?.[0]?.text;
 
     if (!messageHistory?.length || !lastMessageText) {
       return res.status(400).json({ error: "Invalid message history format" });
