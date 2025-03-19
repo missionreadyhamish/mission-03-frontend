@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 require("dotenv").config();
+const generatePrompt = require("./generatePrompt");
 
 // Server setup and configuration
 const app = express();
@@ -18,37 +19,6 @@ const generationConfig = {
 // Middleware setup
 app.use(cors());
 app.use(express.json());
-
-/**
- * Generates the prompt for the AI based on interview context
- * @param {string} jobTitle - The position being interviewed for
- * @param {string} userMessage - The latest message from the candidate
- * @param {Array} messageHistory - Previous conversation history
- */
-const generatePrompt = (jobTitle, userMessage, messageHistory) => {
-  const questionCount = messageHistory.filter((m) => m.role === "model").length;
-  const basePrompt = `You are an AI interviewer for a ${jobTitle} position.
-                      You should also make the candidate laugh.
-                      The candidate's previous responses are:
-                      ${messageHistory
-                        .map((m) => `${m.role}: ${m.parts[0].text}`)
-                        .join("\n")}`;
-
-  if (questionCount >= 6) {
-    return `${basePrompt}
-            Based on the candidate's responses in the interview, provide a detailed evaluation of their performance.
-            Include specific strengths, areas for improvement, and actionable suggestions.
-            Be professional but constructive in your feedback.
-            **Provide a summary of how well you think the user did in the interview.**`;
-  }
-
-  return `${basePrompt}
-          The candidate just said: "${userMessage}".
-          What is your next question for the candidate?
-          Keep the question concise and relevant to the conversation.
-          Do not repeat previous questions.
-          Do not provide canned scenarios or pre-defined questions.`;
-};
 
 /**
  * Main interview endpoint - handles conversation flow and AI responses
