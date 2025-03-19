@@ -1,34 +1,33 @@
-// Import necessary dependencies
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import styles from "./Chatbox.module.css";
 
-// Import necessary icons
+// Import icons used for chat interface controls
 import { FaTimes, FaMinus } from "react-icons/fa";
 import { TiMessages } from "react-icons/ti";
 import { BiSend } from "react-icons/bi";
 
 const Chatbox = () => {
-  // State management for chat functionality
-  const [jobTitle, setJobTitle] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [userInput, setUserInput] = useState("");
-  const [isInterviewStarted, setIsInterviewStarted] = useState(false);
-  const [isChatboxVisible, setIsChatboxVisible] = useState(false);
-  const [isTyping, setIsTyping] = useState(false); // Add new state for typing indicator
-  const messagesEndRef = useRef(null); // Reference for auto-scrolling
+  // Core state management for chat functionality
+  const [jobTitle, setJobTitle] = useState(""); // Stores the job position being interviewed for
+  const [messages, setMessages] = useState([]); // Maintains chat history between user and AI
+  const [userInput, setUserInput] = useState(""); // Handles current user input in textarea
+  const [isInterviewStarted, setIsInterviewStarted] = useState(false); // Controls interview flow
+  const [isChatboxVisible, setIsChatboxVisible] = useState(false); // Controls chat window visibility
+  const [isTyping, setIsTyping] = useState(false); // Controls typing animation display
+  const messagesEndRef = useRef(null); // Reference for auto-scrolling to latest message
 
-  // Auto-scroll function to keep the chat view at the bottom
+  // Auto-scroll chat to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Effect hook to trigger auto-scroll when messages update
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // Initializes the interview session with a job title
+  // Initializes the interview session after job title is submitted
+  // Sets initial state and sends welcome message
   const startInterview = async () => {
     if (!jobTitle.trim()) {
       alert("Please enter a job title");
@@ -45,29 +44,31 @@ const Chatbox = () => {
     setMessages([initialMessage]);
   };
 
-  // Handles the submission of user messages and receives AI responses
+  // Processes user messages and manages API communication
+  // Handles message formatting, sending, and response display
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userInput.trim()) return;
 
+    // Create and store user's message
     const newUserMessage = {
       sender: "user",
       text: userInput,
     };
 
     try {
-      // Show typing indicator immediately after user message
+      // Update UI and prepare for API response
       setMessages((prevMessages) => [...prevMessages, newUserMessage]);
       setUserInput("");
       setIsTyping(true);
 
-      // Format message history for API consumption
+      // Format chat history for API consumption
       const formattedHistory = messages.map((msg) => ({
         role: msg.sender === "user" ? "user" : "model",
         parts: [{ text: msg.text }],
       }));
 
-      // Prepare request payload
+      // Prepare data for API request
       const requestBody = {
         jobTitle,
         message: userInput,
@@ -77,20 +78,19 @@ const Chatbox = () => {
       // Debug log for API request
       console.log("Sending API request with:", JSON.stringify(requestBody, null, 2));
 
-      // Add artificial delay before API call (optional)
+      // Artificial delay for more natural conversation flow
       await new Promise((resolve) => setTimeout(resolve, 2500));
 
-      // Make API call to get interviewer's response
+      // Make API call and process response
       const response = await axios.post("http://localhost:4000/api/interview", requestBody);
 
-      // Create interviewer message object for display
+      // Format and display AI response
       const newBotMessage = {
         sender: "interviewer",
         text: response.data.reply,
       };
 
       setIsTyping(false);
-      // Update chat history with both messages
       setMessages((prevMessages) => [...prevMessages, newBotMessage]);
     } catch (error) {
       console.error("Error:", error);
@@ -99,14 +99,16 @@ const Chatbox = () => {
     }
   };
 
+  // Toggles chat window visibility
   const toggleChatbox = () => {
     setIsChatboxVisible(!isChatboxVisible);
   };
 
-  // Component render section
   return (
     <>
+      {/* Main chat interface container */}
       <div className={`${styles.chatbox} ${isChatboxVisible ? styles.visible : ""}`}>
+        {/* Chat window control buttons */}
         <div className={styles.headerButtons}>
           <button className={styles.headerButton} onClick={() => setIsChatboxVisible(false)}>
             <FaMinus size={16} />
@@ -116,7 +118,7 @@ const Chatbox = () => {
           </button>
         </div>
 
-        {/* Instructions section - moved above job title */}
+        {/* Welcome instructions shown before interview starts */}
         {!isInterviewStarted && (
           <div className={styles.instructionsContainer}>
             <h3 className={styles.instructionsTitle}>Welcome to Tuners Interview Practice!</h3>
@@ -128,6 +130,7 @@ const Chatbox = () => {
           </div>
         )}
 
+        {/* Job title input or display section */}
         <div className={styles.jobTitleContainer}>
           <div className={styles.inputWrapper}>
             {isInterviewStarted ? (
@@ -156,7 +159,7 @@ const Chatbox = () => {
           </div>
         </div>
 
-        {/* Chat messages display section */}
+        {/* Message history display area */}
         <div className={styles.messagesContainer}>
           {messages.map((message, index) => (
             <div
@@ -178,7 +181,7 @@ const Chatbox = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* User input form - always visible but conditionally disabled */}
+        {/* User input area with dynamic textarea */}
         <form onSubmit={handleSubmit} className={styles.inputForm}>
           <textarea
             value={userInput}
@@ -204,6 +207,7 @@ const Chatbox = () => {
         </form>
       </div>
 
+      {/* Floating chat button - visible when chat is minimized */}
       {!isChatboxVisible && (
         <div className={styles.chatButton} onClick={toggleChatbox}>
           <TiMessages />

@@ -35,9 +35,9 @@
 .inputWrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Add this */
-  width: 100%; /* Add this */
-  max-width: calc(100% - 20px); /* Adjust from 80px to 20px */
+  justify-content: space-between;
+  width: 100%;
+  max-width: calc(100% - 20px);
 }
 
 .headerButtons {
