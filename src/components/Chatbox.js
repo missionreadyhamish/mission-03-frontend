@@ -2,7 +2,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import styles from "./Chatbox.module.css";
-import { FaPaperPlane, FaTimes } from "react-icons/fa";
+
+// Import necessary icons
+import { FaTimes, FaMinus } from "react-icons/fa";
+import { TiMessages } from "react-icons/ti";
+import { BiSend } from "react-icons/bi";
 
 const Chatbox = () => {
   // State management for chat functionality
@@ -15,13 +19,25 @@ const Chatbox = () => {
 
   // Auto-scroll function to keep the chat view at the bottom
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      if (messagesEndRef.current) {
+        const container = messagesEndRef.current.parentElement;
+        container.scrollTop = container.scrollHeight;
+      }
+    }, 100);
   };
 
   // Effect hook to trigger auto-scroll when messages update
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Effect hook for initial chat visibility
+  useEffect(() => {
+    if (isChatboxVisible) {
+      scrollToBottom();
+    }
+  }, [isChatboxVisible]);
 
   // Initializes the interview session with a job title
   const startInterview = async () => {
@@ -94,26 +110,47 @@ const Chatbox = () => {
   return (
     <>
       <div className={`${styles.chatbox} ${isChatboxVisible ? styles.visible : ""}`}>
-        {/* Job title input section */}
+        <div className={styles.headerButtons}>
+          <button className={styles.headerButton} onClick={() => setIsChatboxVisible(false)}>
+            <FaMinus size={16} />
+          </button>
+          <button className={styles.headerButton} onClick={toggleChatbox}>
+            <FaTimes size={16} />
+          </button>
+        </div>
+
+        {/* Instructions section - moved above job title */}
+        {!isInterviewStarted && (
+          <div className={styles.instructionsContainer}>
+            <h3 className={styles.instructionsTitle}>Welcome to Tuners Interview Practice!</h3>
+            <div className={styles.instructionsList}>
+              Practice your interviewing skills with our AI-powered assistant. Get personalized
+              questions and feedback based on the position you're applying for. Ready to start?
+              Enter your desired job title below!
+            </div>
+          </div>
+        )}
+
         <div className={styles.jobTitleContainer}>
-          <input
-            type="text"
-            placeholder="Enter the job title you're interviewing for..."
-            value={jobTitle}
-            onChange={(e) => setJobTitle(e.target.value)}
-            disabled={isInterviewStarted}
-            className={styles.jobTitleInput}
-          />
-          {!isInterviewStarted && (
-            <button
-              onClick={startInterview}
-              className={styles.startButton}
-              disabled={!jobTitle.trim()}
-            >
-              Start Interview
-            </button>
-          )}
-          <FaTimes onClick={toggleChatbox} style={{ cursor: "pointer", marginLeft: "10px" }} />
+          <div className={styles.inputWrapper}>
+            <input
+              type="text"
+              placeholder="Enter Job Title "
+              value={jobTitle}
+              onChange={(e) => setJobTitle(e.target.value)}
+              disabled={isInterviewStarted}
+              className={styles.jobTitleInput}
+            />
+            {!isInterviewStarted && (
+              <button
+                onClick={startInterview}
+                className={styles.startButton}
+                disabled={!jobTitle.trim()}
+              >
+                Begin Interview!
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Chat messages display section */}
@@ -125,35 +162,37 @@ const Chatbox = () => {
                 message.sender === "user" ? styles.userMessage : styles.botMessage
               }`}
             >
-              <span className={styles.messageSender}>
-                {message.sender === "user" ? "You" : "Interviewer"}:
-              </span>
               <p className={styles.messageText}>{message.text}</p>
             </div>
           ))}
           <div ref={messagesEndRef} />
         </div>
 
-        {/* User input form - only shown when interview is active */}
-        {isInterviewStarted && (
-          <form onSubmit={handleSubmit} className={styles.inputForm}>
-            <input
-              type="text"
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              placeholder="Type your response..."
-              className={styles.messageInput}
-            />
-            <button type="submit" className={styles.sendButton} disabled={!userInput.trim()}>
-              <FaPaperPlane />
-            </button>
-          </form>
-        )}
+        {/* User input form - always visible but conditionally disabled */}
+        <form onSubmit={handleSubmit} className={styles.inputForm}>
+          <input
+            type="text"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder={
+              isInterviewStarted ? "Type your response..." : "Please start interview first"
+            }
+            className={styles.messageInput}
+            disabled={!isInterviewStarted}
+          />
+          <button
+            type="submit"
+            className={styles.sendButton}
+            disabled={!isInterviewStarted || !userInput.trim()}
+          >
+            <BiSend size={21} />
+          </button>
+        </form>
       </div>
 
       {!isChatboxVisible && (
         <div className={styles.chatButton} onClick={toggleChatbox}>
-          Begin Job Interview
+          <TiMessages />
         </div>
       )}
     </>
