@@ -65,18 +65,36 @@
   color: #333;
 }
 
-.jobTitleInput {
-  min-width: 120px;
-  max-width: 250px;
-  width: fit-content;
-  border: none;
-  background: whitesmoke;
-  border-radius: 4px;
+.jobTitleDisplay {
+  width: 100%;
+  margin-top: 21px;
   padding: 10px;
-  font-family: Sans-serif;
-  font-weight: 600;
-  color: #444;
-  margin-right: 10px; /* Add this */
+  color: #4f46e5;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  background: rgba(79, 70, 229, 0.1);
+  border-radius: 8px;
+}
+
+.jobTitleInput {
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  background: white;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #1f2937;
+  width: fit-content;
+  transition: border-color 0.2s ease;
+  max-width: 200px;
+  margin-right: 10px;
+}
+
+.jobTitleInput:focus {
+  outline: none;
+  border-color: #4f46e5;
 }
 
 .startButton {

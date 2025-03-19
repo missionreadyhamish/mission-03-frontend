@@ -19,25 +19,13 @@ const Chatbox = () => {
 
   // Auto-scroll function to keep the chat view at the bottom
   const scrollToBottom = () => {
-    setTimeout(() => {
-      if (messagesEndRef.current) {
-        const container = messagesEndRef.current.parentElement;
-        container.scrollTop = container.scrollHeight;
-      }
-    }, 100);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Effect hook to trigger auto-scroll when messages update
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  // Effect hook for initial chat visibility
-  useEffect(() => {
-    if (isChatboxVisible) {
-      scrollToBottom();
-    }
-  }, [isChatboxVisible]);
 
   // Initializes the interview session with a job title
   const startInterview = async () => {
@@ -85,7 +73,7 @@ const Chatbox = () => {
       console.log("Sending API request with:", JSON.stringify(requestBody, null, 2));
 
       // Make API call to get interviewer's response
-      const response = await axios.post("http://localhost:4000/api/interview", requestBody);
+      const response = await axios.post("http://localhost:3000/api/interview", requestBody);
 
       // Create interviewer message object for display
       const newBotMessage = {
@@ -133,22 +121,28 @@ const Chatbox = () => {
 
         <div className={styles.jobTitleContainer}>
           <div className={styles.inputWrapper}>
-            <input
-              type="text"
-              placeholder="Enter Job Title "
-              value={jobTitle}
-              onChange={(e) => setJobTitle(e.target.value)}
-              disabled={isInterviewStarted}
-              className={styles.jobTitleInput}
-            />
-            {!isInterviewStarted && (
-              <button
-                onClick={startInterview}
-                className={styles.startButton}
-                disabled={!jobTitle.trim()}
-              >
-                Begin Interview!
-              </button>
+            {isInterviewStarted ? (
+              <div className={styles.jobTitleDisplay}>
+                You're applying for the position: {jobTitle}
+              </div>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Enter Job Title "
+                  value={jobTitle}
+                  onChange={(e) => setJobTitle(e.target.value)}
+                  disabled={isInterviewStarted}
+                  className={styles.jobTitleInput}
+                />
+                <button
+                  onClick={startInterview}
+                  className={styles.startButton}
+                  disabled={!jobTitle.trim()}
+                >
+                  Begin Interview!
+                </button>
+              </>
             )}
           </div>
         </div>
