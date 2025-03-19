@@ -15,6 +15,7 @@ const Chatbox = () => {
   const [userInput, setUserInput] = useState("");
   const [isInterviewStarted, setIsInterviewStarted] = useState(false);
   const [isChatboxVisible, setIsChatboxVisible] = useState(false);
+  const [isTyping, setIsTyping] = useState(false); // Add new state for typing indicator
   const messagesEndRef = useRef(null); // Reference for auto-scrolling
 
   // Auto-scroll function to keep the chat view at the bottom
@@ -49,13 +50,17 @@ const Chatbox = () => {
     e.preventDefault();
     if (!userInput.trim()) return;
 
-    // Create user message object for display
     const newUserMessage = {
       sender: "user",
       text: userInput,
     };
 
     try {
+      // Show typing indicator immediately after user message
+      setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+      setUserInput("");
+      setIsTyping(true);
+
       // Format message history for API consumption
       const formattedHistory = messages.map((msg) => ({
         role: msg.sender === "user" ? "user" : "model",
@@ -72,8 +77,11 @@ const Chatbox = () => {
       // Debug log for API request
       console.log("Sending API request with:", JSON.stringify(requestBody, null, 2));
 
+      // Add artificial delay before API call (optional)
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+
       // Make API call to get interviewer's response
-      const response = await axios.post("http://localhost:3000/api/interview", requestBody);
+      const response = await axios.post("http://localhost:4000/api/interview", requestBody);
 
       // Create interviewer message object for display
       const newBotMessage = {
@@ -81,11 +89,12 @@ const Chatbox = () => {
         text: response.data.reply,
       };
 
+      setIsTyping(false);
       // Update chat history with both messages
-      setMessages((prevMessages) => [...prevMessages, newUserMessage, newBotMessage]);
-      setUserInput(""); // Clear input field
+      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
     } catch (error) {
       console.error("Error:", error);
+      setIsTyping(false);
       alert("Failed to get response from interviewer");
     }
   };
@@ -159,13 +168,19 @@ const Chatbox = () => {
               <p className={styles.messageText}>{message.text}</p>
             </div>
           ))}
+          {isTyping && (
+            <div className={`${styles.typingIndicator} ${styles.visible}`}>
+              <span className={styles.typingDot}></span>
+              <span className={styles.typingDot}></span>
+              <span className={styles.typingDot}></span>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
 
         {/* User input form - always visible but conditionally disabled */}
         <form onSubmit={handleSubmit} className={styles.inputForm}>
-          <input
-            type="text"
+          <textarea
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             placeholder={
@@ -173,6 +188,11 @@ const Chatbox = () => {
             }
             className={styles.messageInput}
             disabled={!isInterviewStarted}
+            rows="1"
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+            }}
           />
           <button
             type="submit"
