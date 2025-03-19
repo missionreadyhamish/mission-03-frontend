@@ -2,13 +2,22 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import styles from "./Chatbox.module.css";
 
-const Chatbox = () => {
-  const [jobTitle, setJobTitle] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [userInput, setUserInput] = useState("");
-  const [isInterviewStarted, setIsInterviewStarted] = useState(false);
-  const messagesEndRef = useRef(null);
+// Import icons used for chat interface controls
+import { FaTimes, FaMinus } from "react-icons/fa";
+import { TiMessages } from "react-icons/ti";
+import { BiSend } from "react-icons/bi";
 
+const Chatbox = () => {
+  // Core state management for chat functionality
+  const [jobTitle, setJobTitle] = useState(""); // Stores the job position being interviewed for
+  const [messages, setMessages] = useState([]); // Maintains chat history between user and AI
+  const [userInput, setUserInput] = useState(""); // Handles current user input in textarea
+  const [isInterviewStarted, setIsInterviewStarted] = useState(false); // Controls interview flow
+  const [isChatboxVisible, setIsChatboxVisible] = useState(false); // Controls chat window visibility
+  const [isTyping, setIsTyping] = useState(false); // Controls typing animation display
+  const messagesEndRef = useRef(null); // Reference for auto-scrolling to latest message
+
+  // Auto-scroll chat to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -17,6 +26,8 @@ const Chatbox = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Initializes the interview session after job title is submitted
+  // Sets initial state and sends welcome message
   const startInterview = async () => {
     if (!jobTitle.trim()) {
       alert("Please enter a job title");
@@ -33,102 +44,176 @@ const Chatbox = () => {
     setMessages([initialMessage]);
   };
 
+  // Processes user messages and manages API communication
+  // Handles message formatting, sending, and response display
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userInput.trim()) return;
 
-    // Add user message to chat UI
+    // Create and store user's message
     const newUserMessage = {
       sender: "user",
       text: userInput,
     };
 
     try {
-      // Transform messages into the format expected by the API
+      // Update UI and prepare for API response
+      setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+      setUserInput("");
+      setIsTyping(true);
+
+      // Format chat history for API consumption
       const formattedHistory = messages.map((msg) => ({
         role: msg.sender === "user" ? "user" : "model",
         parts: [{ text: msg.text }],
       }));
 
+      // Prepare data for API request
       const requestBody = {
         jobTitle,
         message: userInput,
-        messageHistory: formattedHistory, // Modified line: removed the spread operator and the additional user message
+        messageHistory: formattedHistory,
       };
 
+      // Debug log for API request
       console.log("Sending API request with:", JSON.stringify(requestBody, null, 2));
 
-      // Send message to server
-      const response = await axios.post("http://localhost:5000/api/interview", requestBody);
+      // Artificial delay for more natural conversation flow
+      await new Promise((resolve) => setTimeout(resolve, 2500));
 
-      // Add bot response to chat
+      // Make API call and process response
+      const response = await axios.post("http://localhost:4000/api/interview", requestBody);
+
+      // Format and display AI response
       const newBotMessage = {
         sender: "interviewer",
         text: response.data.reply,
       };
 
-      setMessages((prevMessages) => [...prevMessages, newUserMessage, newBotMessage]);
-      setUserInput("");
+      setIsTyping(false);
+      setMessages((prevMessages) => [...prevMessages, newBotMessage]);
     } catch (error) {
       console.error("Error:", error);
+      setIsTyping(false);
       alert("Failed to get response from interviewer");
     }
   };
 
+  // Toggles chat window visibility
+  const toggleChatbox = () => {
+    setIsChatboxVisible(!isChatboxVisible);
+  };
+
   return (
-    <div className={styles.chatbox}>
-      <div className={styles.jobTitleContainer}>
-        <input
-          type="text"
-          placeholder="Enter the job title you're interviewing for..."
-          value={jobTitle}
-          onChange={(e) => setJobTitle(e.target.value)}
-          disabled={isInterviewStarted}
-          className={styles.jobTitleInput}
-        />
-        {!isInterviewStarted && (
-          <button
-            onClick={startInterview}
-            className={styles.startButton}
-            disabled={!jobTitle.trim()}
-          >
-            Start Interview
+    <>
+      {/* Main chat interface container */}
+      <div className={`${styles.chatbox} ${isChatboxVisible ? styles.visible : ""}`}>
+        {/* Chat window control buttons */}
+        <div className={styles.headerButtons}>
+          <button className={styles.headerButton} onClick={() => setIsChatboxVisible(false)}>
+            <FaMinus size={16} />
           </button>
-        )}
-      </div>
+          <button className={styles.headerButton} onClick={toggleChatbox}>
+            <FaTimes size={16} />
+          </button>
+        </div>
 
-      <div className={styles.messagesContainer}>
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`${styles.message} ${
-              message.sender === "user" ? styles.userMessage : styles.botMessage
-            }`}
-          >
-            <span className={styles.messageSender}>
-              {message.sender === "user" ? "You" : "Interviewer"}:
-            </span>
-            <p className={styles.messageText}>{message.text}</p>
+        {/* Welcome instructions shown before interview starts */}
+        {!isInterviewStarted && (
+          <div className={styles.instructionsContainer}>
+            <h3 className={styles.instructionsTitle}>Welcome to Tuners Interview Practice!</h3>
+            <div className={styles.instructionsList}>
+              Practice your interviewing skills with our AI-powered assistant. Get personalized
+              questions and feedback based on the position you're applying for. Ready to start?
+              Enter your desired job title below!
+            </div>
           </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
+        )}
 
-      {isInterviewStarted && (
+        {/* Job title input or display section */}
+        <div className={styles.jobTitleContainer}>
+          <div className={styles.inputWrapper}>
+            {isInterviewStarted ? (
+              <div className={styles.jobTitleDisplay}>
+                You're applying for the position: {jobTitle}
+              </div>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Enter Job Title "
+                  value={jobTitle}
+                  onChange={(e) => setJobTitle(e.target.value)}
+                  disabled={isInterviewStarted}
+                  className={styles.jobTitleInput}
+                />
+                <button
+                  onClick={startInterview}
+                  className={styles.startButton}
+                  disabled={!jobTitle.trim()}
+                >
+                  Begin Interview!
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Message history display area */}
+        <div className={styles.messagesContainer}>
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`${styles.message} ${
+                message.sender === "user" ? styles.userMessage : styles.botMessage
+              }`}
+            >
+              <p className={styles.messageText}>{message.text}</p>
+            </div>
+          ))}
+          {isTyping && (
+            <div className={`${styles.typingIndicator} ${styles.visible}`}>
+              <span className={styles.typingDot}></span>
+              <span className={styles.typingDot}></span>
+              <span className={styles.typingDot}></span>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* User input area with dynamic textarea */}
         <form onSubmit={handleSubmit} className={styles.inputForm}>
-          <input
-            type="text"
+          <textarea
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            placeholder="Type your response..."
+            placeholder={
+              isInterviewStarted ? "Type your response..." : "Please start interview first"
+            }
             className={styles.messageInput}
+            disabled={!isInterviewStarted}
+            rows="1"
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+            }}
           />
-          <button type="submit" className={styles.sendButton} disabled={!userInput.trim()}>
-            Send
+          <button
+            type="submit"
+            className={styles.sendButton}
+            disabled={!isInterviewStarted || !userInput.trim()}
+          >
+            <BiSend size={21} />
           </button>
         </form>
+      </div>
+
+      {/* Floating chat button - visible when chat is minimized */}
+      {!isChatboxVisible && (
+        <div className={styles.chatButton} onClick={toggleChatbox}>
+          <TiMessages />
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
