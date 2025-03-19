@@ -12,7 +12,6 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "node": "^20.19.0",
-    "nodemon": "^3.1.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
@@ -20,7 +19,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "server": "nodemon server-TOBEDELETED.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -43,8 +41,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "dotenv-webpack": "^8.1.0"
   }
 }
