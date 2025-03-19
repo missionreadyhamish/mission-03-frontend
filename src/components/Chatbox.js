@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import styles from "./Chatbox.module.css";
-
 // Import icons used for chat interface controls
 import { FaTimes, FaMinus } from "react-icons/fa";
 import { TiMessages } from "react-icons/ti";
 import { BiSend } from "react-icons/bi";
+
+const port = process.env.REACT_APP_SERVER_PORT || 5000;
+console.log(`Connecting to backend via port ${port}`);
 
 const Chatbox = () => {
   // Core state management for chat functionality
@@ -80,9 +82,11 @@ const Chatbox = () => {
 
       // Artificial delay for more natural conversation flow
       await new Promise((resolve) => setTimeout(resolve, 2500));
+      console.log(`http://localhost:${port}/api/interview`);
 
       // Make API call and process response
-      const response = await axios.post("http://localhost:4000/api/interview", requestBody);
+      const response = await axios.post(`http://localhost:${port}/api/interview`, requestBody);
+
 
       // Format and display AI response
       const newBotMessage = {
