@@ -85,7 +85,7 @@ const Chatbox = () => {
       console.log("Sending API request with:", JSON.stringify(requestBody, null, 2));
 
       // Make API call to get interviewer's response
-      const response = await axios.post("http://localhost:5000/api/interview", requestBody);
+      const response = await axios.post("http://localhost:4000/api/interview", requestBody);
 
       // Create interviewer message object for display
       const newBotMessage = {
