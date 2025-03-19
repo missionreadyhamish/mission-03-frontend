@@ -10,13 +10,6 @@ const port = process.env.REACT_APP_SERVER_PORT || 5000;
 console.log(`Connecting to backend via port ${port}`);
 
 const Chatbox = () => {
-  const [jobTitle, setJobTitle] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [userInput, setUserInput] = useState("");
-  const [isInterviewStarted, setIsInterviewStarted] = useState(false);
-  const messagesEndRef = useRef(null);
-
-const Chatbox = () => {
   // Core state management for chat functionality
   const [jobTitle, setJobTitle] = useState(""); // Stores the job position being interviewed for
   const [messages, setMessages] = useState([]); // Maintains chat history between user and AI
