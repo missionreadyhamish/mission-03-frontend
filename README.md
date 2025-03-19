@@ -2,6 +2,15 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Useful Links
+JIRA board: https://missionreadyhq-team-n2tq1glq.atlassian.net/jira/software/projects/M2/boards/2
+Git Repo Mission 2: https://github.com/CameronBe/Mission2
+Git Repo Mission 3: https://github.com/missionreadyhamish/mission-03-frontend
+System Instructions: https://ai.google.dev/gemini-api/docs/text-generation?lang=python#system-instruc
+ions
+Use Cases > Chat: https://ai.google.dev/gemini-api/tutorials/web-app?lang=python
+
+
 ## Available Scripts
 
 In the project directory, you can run:
