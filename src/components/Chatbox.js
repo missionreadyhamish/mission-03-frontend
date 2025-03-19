@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import styles from "./Chatbox.module.css";
-// import 'dotenv/config';
 
-// const port = process.env.SERVER_PORT;
-const port = 5000;
+const port = process.env.REACT_APP_SERVER_PORT || 5000;
+console.log(`Connecting to backend via port ${port}`);
 
 const Chatbox = () => {
   const [jobTitle, setJobTitle] = useState("");
@@ -121,7 +120,7 @@ const Chatbox = () => {
       </div>
 
       {isInterviewStarted && (
-        <form action="#submit" onSubmit={handleSubmit} className={styles.inputForm}>
+        <form onSubmit={handleSubmit} className={styles.inputForm}>
           <input
             type="text"
             value={userInput}
