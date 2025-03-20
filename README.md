@@ -1,79 +1,92 @@
-# Getting Started with Create React App
+# Tuners Car Interview Practice Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+An interactive interview practice platform built with React and Node.js, featuring an AI-powered chatbot that conducts mock interviews for Tuners Car positions. The application helps candidates prepare for job interviews by providing personalized questions and feedback based on specific job roles.
 
-## Useful Links
-JIRA board: https://missionreadyhq-team-n2tq1glq.atlassian.net/jira/software/projects/M2/boards/2
-Git Repo Mission 2: https://github.com/CameronBe/Mission2
-Git Repo Mission 3: https://github.com/missionreadyhamish/mission-03-frontend
-System Instructions: https://ai.google.dev/gemini-api/docs/text-generation?lang=python#system-instruc
-ions
-Use Cases > Chat: https://ai.google.dev/gemini-api/tutorials/web-app?lang=python
+## Features
+- AI-powered interview simulation
+- Real-time chat interface
+- Dynamic conversation flow
+- Position-specific questions
+- Responsive design
+- Interactive typing indicators
+- Minimizable chat window
 
+## Tech Stack
+### Frontend
+- React.js
+- Axios for API calls
+- React Icons
+- CSS Modules for styling
+- Responsive Design
 
-## Available Scripts
+### Backend
+- Node.js
+- Express.js
+- Google Gemini AI API
+- CORS for cross-origin requests
 
-In the project directory, you can run:
+## Installation
 
-### `npm start`
+### Frontend Setup
+```bash
+# Clone the repository
+git clone <your-repo-url>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Navigate to frontend directory
+cd mission-03-frontend
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Install dependencies
+npm install
 
-### `npm test`
+# Start development server
+npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Backend Setup
+```bash
+# Navigate to backend directory
+cd mission-03-backend
 
-### `npm run build`
+# Install dependencies
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Create .env file and add your Google Gemini API key
+echo "GOOGLE_API_KEY=your_api_key_here" > .env
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Start the server
+npm start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Environment Variables
+Frontend:
+- `REACT_APP_SERVER_PORT`: Backend server port (default: 4000)
 
-### `npm run eject`
+Backend:
+- `GOOGLE_API_KEY`: Your Google Gemini AI API key
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Usage
+1. Open the application in your browser
+2. Click the chat icon to open the interview interface
+3. Enter your desired job position
+4. Start the interview and respond to the AI interviewer's questions
+5. Receive real-time feedback and follow-up questions
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Features in Detail
+- **Dynamic Chat Interface**: Minimizable and expandable chat window
+- **Real-time Typing Indicators**: Visual feedback when AI is "typing"
+- **Responsive Design**: Works on both desktop and mobile devices
+- **Position-specific Questions**: Tailored interview experience based on job role
+- **Interactive Elements**: Buttons, icons, and smooth animations
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## API Endpoints
+- POST `/api/interview`: Main endpoint for interview conversation
+  - Requires: `jobTitle`, `message`, `messageHistory`
+  - Returns: AI-generated interview response
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Contributing
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
