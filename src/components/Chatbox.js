@@ -9,6 +9,9 @@ import { BiSend } from "react-icons/bi";
 const port = process.env.REACT_APP_SERVER_PORT || 5000;
 console.log(`Connecting to backend via port ${port}`);
 
+// used to store the session ID for save history
+let sessionID;
+
 const Chatbox = () => {
   // Core state management for chat functionality
   const [jobTitle, setJobTitle] = useState(""); // Stores the job position being interviewed for
@@ -36,7 +39,16 @@ const Chatbox = () => {
       return;
     }
 
-    console.log("Starting interview for job title:", jobTitle);
+    async function sessionLogger() {
+      console.log("Starting interview for job title:", jobTitle);
+      // Prepare data for API request
+      const requestBody = { jobTitle: jobTitle };
+      sessionID = await axios.post(`http://localhost:${port}/api/save-session`, requestBody).JSON.stringify();
+      console.log(`sessionID: ${sessionID}`);
+
+    }
+
+    sessionLogger();
 
     setIsInterviewStarted(true);
     const initialMessage = {
