@@ -31,7 +31,7 @@ cd mission-03-frontend
 npm install
 
 # Start development server
-npm start
+npm run start
 ```
 
 ## Environment Variables
