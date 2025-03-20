@@ -3,26 +3,22 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Useful Links
-JIRA board: https://missionreadyhq-team-n2tq1glq.atlassian.net/jira/software/projects/M2/boards/2
-Git Repo Mission 2: https://github.com/CameronBe/Mission2
-Git Repo Mission 3 FRONTEND: https://github.com/missionreadyhamish/mission-03-frontend
-Git Repo Mission 3 BACKEND: https://github.com/CameronBe/mission-03-backend 
-System Instructions: https://ai.google.dev/gemini-api/docs/text-generation?lang=python#system-instruc
+- JIRA board: https://missionreadyhq-team-n2tq1glq.atlassian.net/jira/software/projects/M2/boards/2
+- Git Repo Mission 2: https://github.com/CameronBe/Mission2
+- Git Repo Mission 3 FRONTEND: https://github.com/missionreadyhamish/mission-03-frontend
+- Git Repo Mission 3 BACKEND: https://github.com/CameronBe/mission-03-backend 
+- System Instructions: https://ai.google.dev/gemini-api/docs/text-generation?lang=python#system-instruc
 ions
-Use Cases > Chat: https://ai.google.dev/gemini-api/tutorials/web-app?lang=python
+- Use Cases > Chat: https://ai.google.dev/gemini-api/tutorials/web-app?lang=python
 
 
-## Available Scripts
+## Available Scriptsd a bunch of tests for invalid empty inputs and wrote the code to pass said tests
 
-In the project directory, you can run:
+commit c4828391ddab33ee21f85a59aaef5fee95413f5b
+Author: Tom Atkinson @cheese <tom@funk.co.nz>
+Date:   Thu Mar 20 11:00:00 2025 +1300
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    install dotenv, and const port = process.env.SERVER_PORT || 4000.
 
 ### `npm test`
 

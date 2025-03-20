@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import styles from "./Chatbox.module.css";
-// Import icons used for chat interface controls
 import { FaTimes, FaMinus } from "react-icons/fa";
 import { TiMessages } from "react-icons/ti";
 import { BiSend } from "react-icons/bi";
@@ -39,16 +38,20 @@ const Chatbox = () => {
       return;
     }
 
-    async function sessionLogger() {
-      console.log("Starting interview for job title:", jobTitle);
-      // Prepare data for API request
-      const requestBody = { jobTitle: jobTitle };
-      sessionID = await axios.post(`http://localhost:${port}/api/save-session`, requestBody).JSON.stringify();
-      console.log(`sessionID: ${sessionID}`);
-
+    // Timestamp will be the session ID for saving chat history
+    async function sessionLogger(j) {
+      console.log("Starting interview for job title:", j);
+      const requestBody = { jobTitle: j };
+      try {
+         sessionID = await axios.post(`http://localhost:${port}/api/save-session`, requestBody);
+        console.log(`Started sessionID: ${sessionID}`);
+      } catch(error) {
+        console.log(`ERROR STARTING SESSION: ${error}`);
+      }
+     
     }
 
-    sessionLogger();
+    sessionLogger(jobTitle);
 
     setIsInterviewStarted(true);
     const initialMessage = {
