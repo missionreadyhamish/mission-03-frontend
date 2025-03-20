@@ -13,22 +13,13 @@ An interactive interview practice platform built with React and Node.js, featuri
 - Minimizable chat window
 
 ## Tech Stack
-### Frontend
 - React.js
 - Axios for API calls
 - React Icons
 - CSS Modules for styling
 - Responsive Design
 
-### Backend
-- Node.js
-- Express.js
-- Google Gemini AI API
-- CORS for cross-origin requests
-
-## Installation
-
-### Frontend Setup
+## Installation & Setup
 ```bash
 # Clone the repository
 git clone <your-repo-url>
@@ -43,27 +34,8 @@ npm install
 npm start
 ```
 
-### Backend Setup
-```bash
-# Navigate to backend directory
-cd mission-03-backend
-
-# Install dependencies
-npm install
-
-# Create .env file and add your Google Gemini API key
-echo "GOOGLE_API_KEY=your_api_key_here" > .env
-
-# Start the server
-npm start
-```
-
 ## Environment Variables
-Frontend:
 - `REACT_APP_SERVER_PORT`: Backend server port (default: 4000)
-
-Backend:
-- `GOOGLE_API_KEY`: Your Google Gemini AI API key
 
 ## Usage
 1. Open the application in your browser
