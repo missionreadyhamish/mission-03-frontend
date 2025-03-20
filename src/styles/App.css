@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 html, body, .App {
   margin: 0;
@@ -8,4 +11,18 @@ html, body, .App {
 body, .App {
   display: grid;
   grid-template-rows: auto 1fr auto;
+}
+
+header {
+  flex-shrink: 0;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  flex-shrink: 0;
+  margin-top: auto;
+  width: 100%;
 }
