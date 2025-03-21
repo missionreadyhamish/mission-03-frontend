@@ -3,26 +3,17 @@
   bottom: 0;
   background-color: #7dbafa;
   color: white;
-  width: 100%;
+  width: 99%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 350px));
+  grid-template-columns: repeat(auto-fit, minmax(80px, 260px));
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0 0 0 ;;
+  padding: 8px 8px 0 0 ;
 }
 .footer div {
     display: grid;
-    width: 100%;
     vertical-align: middle;
-    align-items:flex-end;
     margin-left: 0;  
-    margin-right: 16px;
-    gap: 16px;
-}
-div.griditem {  margin-left: 40%;
-  margin-left: 20%;
-  margin-right: 40%;
-  width: 100%;
 }
 .footer a {
   color: white;
@@ -48,22 +39,9 @@ div.griditem {  margin-left: 40%;
   color: #0056b3;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  min-width: 60%;
-  max-width: 80%;
+  min-width: 250px;
 }
 .button:hover {
   background-color: #0056b3;
   color: white;
-}
-div.griditem:nth-child(3n -1) {
-    /* background-color: red; */
-}
-div.left {
-    /* background-color: red;  */
-}
-div.middle {
-    /* background-color: orange;  */
-}
-div.right {
-    /* background-color: yellow;  */
 }

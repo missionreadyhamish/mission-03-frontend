@@ -1,11 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 .chatbox {
-  height: 90%;
+  min-height: 80%;
   width: 380px;
   position: fixed;
   right: 0;
-  bottom: 0;
+  bottom: 100px; /* for footger */
   margin: 15px;
   background: #ffffff;
   border-radius: 16px;
@@ -114,7 +114,7 @@
 }
 
 .messagesContainer {
-  height: 75%;
+  /* height: 75%; */
   background: #f8fafc;
   overflow-y: auto;
   padding: 16px;
