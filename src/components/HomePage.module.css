@@ -1,0 +1,403 @@
+/* HomePage.module.css */
+
+/* Core styles improvements */
+.homeContainer {
+  width: 100%;
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 0 20px;
+  min-height: calc(100vh - 160px); /* Account for header/footer */
+}
+
+/* Enhanced Hero Section */
+.heroSection {
+  background: url('https://content.tgstatic.co.nz/webassets/globalassets/campaign-banners--artwork/2024/1.-cars/readers-digest-5-years/mostawesome_websiteads_1078x303_tinaf.jpg');
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 500px; /* Match the banner image height */
+  display: flex;
+  align-items: center;
+  border-radius: 12px 12px 0 0; /* Round only top corners */
+  margin-bottom: 0; /* Remove margin as we'll add it to the button container */
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.heroSection:hover {
+  transform: translateY(-5px);
+}
+
+/* Remove the gradient overlay to show image clearly */
+.heroSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);  /* Reduced opacity significantly */
+  border-radius: 8px;
+}
+
+/* Adjust content positioning */
+.heroContent {
+  position: relative;
+  z-index: 1;
+  color: white;
+  padding: 30px;
+  max-width: 600px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);  /* Added for better text visibility */
+}
+
+.heroContent h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+}
+
+.heroContent p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+/* Add button container */
+.buttonContainer {
+  background: #f5f5f5;
+  padding: 20px;
+  text-align: center;
+  border-radius: 0 0 12px 12px;
+  margin-bottom: 60px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Buttons */
+.primaryBtn {
+  background: linear-gradient(to right, #ff6b00, #ff8533);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.2);
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.primaryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.3);
+}
+
+.productsSection {
+  margin-bottom: 60px;
+}
+
+.productsSection h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 32px;
+  color: #333;
+}
+
+.productsContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Enhanced Product Cards */
+.productCard {
+  flex: 1;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 400px; /* Add minimum height for consistent card size */
+}
+
+.productCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.productCard:hover .placeholderImg {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.placeholderImg {
+  width: 100%;
+  height: 250px; /* Increased height for better visibility */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+/* Car Insurance Card */
+.productCard:nth-child(1) .placeholderImg {
+  background-image: url('https://ascentlawyers.com.au/wp-content/uploads/2021/12/Web-Photos-40.jpg');
+  object-fit: cover;
+  background-position: center 20%; /* Adjust vertical position */
+}
+
+/* Third Party Insurance Card */
+.productCard:nth-child(2) .placeholderImg {
+  background-image: url('https://www.aiicoplc.com/images/services/thirdpartycar.jpg');
+  object-fit: cover;
+  background-position: center; /* Center the image */
+}
+
+/* Mechanical Breakdown Card */
+.productCard:nth-child(3) .placeholderImg {
+  background-image: url('https://autolife.co.nz/wp-content/uploads/2023/05/Mechanical-Breakdown-Insurance-tablet-600x361.png');
+  object-fit: cover;
+  background-position: center; /* Center the image */
+}
+
+.productCard h3 {
+  padding: 15px 20px 5px;
+  color: #333;
+}
+
+.productCard p {
+  padding: 0 20px 20px;
+  color: #666;
+}
+
+.linkBtn {
+  display: block;
+  text-align: center;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Enhanced Document Section */
+.documentsSection {
+  background: linear-gradient(to bottom right, #f9f9f9, #f0f0f0);
+  padding: 50px;
+  border-radius: 12px;
+  margin-bottom: 60px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.documentsSection h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.documentLinks {
+  margin-top: 30px;
+}
+
+.documentLinks h3 {
+  margin-top: 25px;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.documentLinks ul {
+  list-style-type: none;
+  padding-left: 5px;
+}
+
+.documentLinks ul ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.documentLinks li {
+  margin-bottom: 10px;
+}
+
+.fakeLink {
+  color: #0066cc;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.fakeLink:hover {
+  color: #004c99;
+}
+
+.fakeLink:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #0066cc;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.fakeLink:hover:after {
+  transform: scaleX(1);
+}
+
+.helpText {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.financialInfo {
+  margin-top: 20px;
+}
+
+/* Enhanced Help Section */
+.helpSection {
+  background: linear-gradient(135deg, #f0f7ff, #e6f0ff);
+  padding: 70px 50px;
+  border-radius: 12px;
+  margin-bottom: 60px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.helpContent h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.helpContent > p {
+  text-align: center;
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #555;
+}
+
+.contactOptions {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.contactCard {
+  flex: 1;
+  background: white;
+  padding: 35px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.contactCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Icons */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 25px;
+  background: linear-gradient(135deg, #f0f0f0, #e6e6e6);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.icon:hover {
+  transform: scale(1.1);
+}
+
+.phoneIcon::before {
+  content: "☎";
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.emailIcon::before {
+  content: "✉";
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.locationIcon::before {
+  content: "📍";
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.contactCard h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.contactCard p {
+  color: #666;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .homeContainer {
+    padding: 0 15px;
+  }
+  
+  .productsContainer,
+  .contactOptions {
+    flex-direction: column;
+  }
+  
+  .heroSection {
+    height: 200px;  /* Adjust height for mobile */
+    background-size: cover;
+  }
+  
+  .buttonContainer {
+    padding: 15px;
+  }
+  
+  .heroContent {
+    padding: 30px;
+  }
+  
+  .heroContent h1 {
+    font-size: 32px;
+  }
+  
+  .contactOptions {
+    gap: 15px;
+  }
+  
+  .documentsSection,
+  .helpSection {
+    padding: 30px;
+  }
+
+  .placeholderImg {
+    height: 200px; /* Maintain proportional height on mobile */
+  }
+}
